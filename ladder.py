@@ -7,17 +7,24 @@ from gpiozero import LED, LEDBoard, Button, Buzzer
 import random 
  
 board = LEDBoard(9, 22, 8, 18, 7, 17, 23, 24, 25)
-button = Button(20)
-buzzer = Buzzer(21)
+button = Button(21)
+buzzer = Buzzer(20)
 
 
 def game():
 	random.seed()
 	board.on()
-	sleep(0.5)
-	for i in range(8, -1, -1):
+	sleep(0.25)
+	board.leds[7].off()
+	board.leds[6].off()
+	sleep(0.25)
+	board.leds[8].off()
+	sleep(0.25)
+	
+	for i in range(5, -1, -2):
 		board.leds[i].off()
-		sleep(0.5)
+		board.leds[i-1].off()
+		sleep(0.25)
 	
 	gameState = 0	#1 = win, -1 = lose
 	led = 0
@@ -33,7 +40,7 @@ def game():
 					led += 1
 					if led > 8:
 						gameState = 1
-						board.blink()
+						board.blink(on_time=0.5, off_time=0.5)
 						sleep(5)
 						board.off()
 					else:
@@ -64,5 +71,3 @@ while True:
 			sleep(0.25)
 			
 	game()
-
-	
